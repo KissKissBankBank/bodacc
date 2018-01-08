@@ -359,7 +359,7 @@ if Bilan.count == 0
 
     # If you only want to insert a special year (ex: only 2015)
     if ARGV[0]
-      next if !file.include? ARGV[0] and year.include? ARGV[0]
+      next if !file.include? ARGV[0] and years.include? ARGV[0]
     end
 
     # Init path for archives
