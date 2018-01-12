@@ -6,6 +6,20 @@ require 'net/http'
 require 'open-uri'
 require 'pg' # or 'mysql2' or 'sqlite3'
 
+# Require models
+require_relative 'models/bilan'
+require_relative 'models/pcl'
+require_relative 'models/modification'
+require_relative 'models/radiation'
+require_relative 'models/immatriculation'
+
+# Require modules
+require_relative 'modules/bilan'
+require_relative 'modules/pcl'
+require_relative 'modules/modification'
+require_relative 'modules/radiation'
+require_relative 'modules/immatriculation'
+
 # Establishing connection
 ActiveRecord::Base.establish_connection(
   adapter:  'postgresql', # or 'mysql2' or 'sqlite3'
@@ -14,18 +28,6 @@ ActiveRecord::Base.establish_connection(
   password: '',
   host:     'localhost',
 )
-
-# Models
-class Bilan < ActiveRecord::Base
-end
-class Pcl < ActiveRecord::Base
-end
-class Immatriculation < ActiveRecord::Base
-end
-class Modification < ActiveRecord::Base
-end
-class Radiation < ActiveRecord::Base
-end
 
 # Accepted years
 years = (2008..Time.now.year.to_i).to_a
@@ -41,380 +43,56 @@ end
 
 # Insert every Bilan from "tmp/xml/BILAN" into database
 def insert_bilan
-  Dir.glob('tmp/xml/BILAN/*') do |file|
+  Dir.glob('tmp/xml/BILAN/*.xml*') do |file|
     xml = Nokogiri::XML(open(file))
     date = xml.xpath('//dateParution').first.text.to_datetime
     xml.xpath('//avis').each do |avis|
-      # rectify("Bilan", avis.search('typeAnnonce').children.to_s.gsub(%r{<>/}, '')\
-      # , avis.search('numeroIdentificationRCS').text)
-      Bilan.create( \
-        nojo:
-          avis.search('nojo').text,
-        type_annonce:
-          avis.search('typeAnnonce').children.to_s.gsub(%r{<>/}, ''),
-        numero_annonce:
-          avis.search('numeroAnnonce').text,
-        numero_departement:
-          avis.search('numeroDepartement').text,
-        tribunal:
-          avis.search('tribunal').text,
-        siren:
-          avis.search('numeroIdentificationRCS').text,
-        code_rcs:
-          avis.search('codeRCS').text,
-        nom_greffe_immat:
-          avis.search('nomGreffeImmat').text,
-        denomination:
-          avis.search('denomination').text,
-        sigle:
-          avis.search('sigle').text,
-        forme_juridique:
-          avis.search('formeJuridique').text,
-        numero_voie:
-          avis.search('numeroVoie').text,
-        type_voie:
-          avis.search('typeVoie').text,
-        nom_voie:
-          avis.search('nomVoie').text,
-        compl_geographique:
-          avis.search('complGeographique').text,
-        code_postal:
-          avis.search('codePostal').text,
-        ville:
-          avis.search('ville').text,
-        date_cloture:
-          avis.search('dateCloture').text,
-        type_depot:
-          avis.search('typeDepot').text,
-        descriptif:
-          avis.search('descriptif').text,
-        nom_publication_ap:
-          avis.search('parutionAvisPrecedent/nomPublication').text,
-        numero_parution_ap:
-          avis.search('parutionAvisPrecedent/numeroParution').text,
-        date_parution_ap:
-          avis.search('parutionAvisPrecedent/dateParution').text,
-        numero_annonce_ap:
-          avis.search('parutionAvisPrecedent/numeroAnnonce').text,
-        file:
-          file.split('/').last,
-        type_bodacc:
-          'BODACC C',
-        annee_parution:
-          date,
-      )
+      Scrapper::BilanAction.create(avis, file, date)
     end
     FileUtils.rm(file)
-    puts file.split('/').last + ' done'
-    next if ['.', '..'].include?(file)
   end
 end
 
 # Insert every PCL from "tmp/xml/PCL" into database
 def insert_pcl
-  Dir.glob('tmp/xml/PCL/*') do |file|
+  Dir.glob('tmp/xml/PCL/*.xml*') do |file|
     xml = Nokogiri::XML(open(file))
     date = xml.xpath('//dateParution').first.text.to_datetime
     xml.xpath('//annonce').each do |annonce|
-      # rectify("Pcl", avis.search('typeAnnonce').children.to_s.gsub(%r{<>/}, '')\
-      # , avis.search('numeroIdentificationRCS').text)
-      Pcl.create( \
-        nojo:
-          annonce.search('nojo').text,
-        type_annonce:
-          annonce.search('typeAnnonce').children.to_s.gsub(%r{<>/}, ''),
-        numero_annonce:
-          annonce.search('numeroAnnonce').text,
-        numero_departement:
-          annonce.search('numeroDepartement').text,
-        tribunal:
-          annonce.search('tribunal').text,
-        identifiant_client:
-          annonce.search('identifiantClient').text,
-        siren:
-          annonce.search('numeroIdentificationRCS').text,
-        code_rcs:
-          annonce.search('codeRCS').text,
-        nom_greffe_immat:
-          annonce.search('nomGreffeImmat').text,
-        denomination:
-          annonce.search('denomination').text,
-        sigle:
-          annonce.search('sigle').text,
-        forme_juridique:
-          annonce.search('formeJuridique').text,
-        numero_voie:
-          annonce.search('numeroVoie').text,
-        type_voie:
-          annonce.search('typeVoie').text,
-        nom_voie:
-          annonce.search('nomVoie').text,
-        compl_geographique:
-          annonce.search('complGeographique').text,
-        code_postal:
-          annonce.search('codePostal').text,
-        ville:
-          annonce.search('ville').text,
-        famille:
-          annonce.search('famille').text,
-        nature:
-          annonce.search('nature').text,
-        date_jugement:
-          annonce.search('date').text,
-        compl_jugement:
-          annonce.search('complementJugement').text,
-        nom_publication_ap:
-          annonce.search('parutionAvisPrecedent/nomPublication').text,
-        numero_parution_ap:
-          annonce.search('parutionAvisPrecedent/numeroPublication').text,
-        date_parution_ap:
-          annonce.search('parutionAvisPrecedent/dateParution').text,
-        numero_annonce_ap:
-          annonce.search('parutionAvisPrecedent/numeroAnnonce').text,
-        file:
-          file.split('/').last,
-        type_bodacc:
-          'BODACC A',
-        annee_parution:
-          date,
-      )
+      Scrapper::PclAction.create(annonce, file, date)
     end
     FileUtils.rm(file)
-    puts file.split('/').last + ' done'
-    next if ['.', '..'].include?(file)
   end
 end
 
 # Insert every RCS-A from "tmp/xml/RCS-A" into database
 def insert_rcsa
-  Dir.glob('tmp/xml/RCS-A/*') do |file|
+  Dir.glob('tmp/xml/RCS-A/*.xml*') do |file|
     xml = Nokogiri::XML(open(file))
     xml.xpath('//avis').each do |annonce|
-      if !annonce.search('categorieVente').blank?
-        immat = annonce.search('categorieVente').text
-        categorie = 'Vente'
-      elsif !annonce.search('categorieCreation').blank?
-        immat = annonce.search('categorieCreation').text
-        categorie = 'Creation'
-      else
-        immat = annonce.search('immatriculation').text
-        categorie = 'Immatriculation'
-      end
       date = xml.xpath('//dateParution').first.text.to_datetime
-      # rectify("Immatriculation", avis.search('typeAnnonce').children.to_s.gsub(%r{<>/}, '')\
-      # , avis.search('numeroIdentificationRCS').text)
-      Immatriculation.create( \
-        nojo:
-          annonce.search('nojo').text,
-        type_annonce:
-          annonce.search('typeAnnonce').children.to_s.gsub(%r{<>/}, ''),
-        numero_annonce:
-          annonce.search('numeroAnnonce').text,
-        numero_departement:
-          annonce.search('numeroDepartement').text,
-        tribunal:
-          annonce.search('tribunal').text,
-        siren:
-          annonce.search('numeroIdentification').text,
-        code_rcs:
-          annonce.search('codeRCS').text,
-        nom_greffe_immat:
-          annonce.search('nomGreffeImmat').text,
-        denomination:
-          annonce.search('denomination').text,
-        administration:
-          annonce.search('administration').text,
-        montant_capital:
-          annonce.search('montantCapital').text,
-        devise:
-          annonce.search('devise').text,
-        forme_juridique:
-          annonce.search('formeJuridique').text,
-        type_voie:
-          annonce.search('typeVoie').text,
-        numero_voie:
-          annonce.search('numeroVoie').text,
-        nom_voie:
-          annonce.search('nomVoie').text,
-        code_postal:
-          annonce.search('codePostal').text,
-        ville:
-          annonce.search('ville').text,
-        origine_fonds:
-          annonce.search('origineFonds').text,
-        qualite_etablissement:
-          annonce.search('qualiteEtablissement').text,
-        activite:
-          annonce.search('activite').text,
-        date_commencement_activite:
-          annonce.search('dateCommencementActivite').text,
-        date_immatriculation:
-          annonce.search('dateImmatriculation').text,
-        descriptif:
-          annonce.search('descriptif').text,
-        date_effet:
-          annonce.search('dateEffet').text,
-        journal:
-          annonce.search('journal').text,
-        opposition:
-          annonce.search('opposition').text,
-        declaration_creance:
-          annonce.search('declarationCreance').text,
-        categorie:
-          categorie,
-        immatriculation:
-          immat,
-        nom_publication_ap:
-          annonce.search('parutionAvisPrecedent/nomPublication').text,
-        numero_parution_ap:
-          annonce.search('parutionAvisPrecedent/numeroPublication').text,
-        date_parution_ap:
-          annonce.search('parutionAvisPrecedent/dateParution').text,
-        numero_annonce_ap:
-          annonce.search('parutionAvisPrecedent/numeroAnnonce').text,
-        file:
-          file.split('/').last,
-        type_bodacc:
-          'BODACC A',
-        annee_parution:
-          date,
-      )
+      categorie = Scrapper::ImmatriculationAction.categorie(annonce)
+      immat = Scrapper::ImmatriculationAction.immat(annonce)
+      Scrapper::ImmatriculationAction.create(annonce, file, date, \
+                                             categorie, immat)
     end
     FileUtils.rm(file)
-    puts file.split('/').last + ' done'
-    next if ['.', '..'].include?(file)
   end
 end
 
 # Insert every RCS-B from "tmp/xml/RCS-B" into database
 def insert_rcsb
-  Dir.glob('tmp/xml/RCS-B/*') do |file|
+  Dir.glob('tmp/xml/RCS-B/*.xml*') do |file|
     xml = Nokogiri::XML(open(file))
     xml.xpath('//avis').each do |annonce|
       date = xml.xpath('//dateParution').first.text.to_datetime
-      if !annonce.search('modificationsGenerales').blank?
-        # rectify("Modification", avis.search('typeAnnonce').children.to_s.gsub(%r{<>/}, '')\
-        # , avis.search('numeroIdentificationRCS').text)
-        Modification.create( \
-          nojo:
-            annonce.search('nojo').text,
-          type_annonce:
-            annonce.search('typeAnnonce').children.to_s.gsub(%r{<>/}, ''),
-          numero_annonce:
-            annonce.search('numeroAnnonce').text,
-          numero_departement:
-            annonce.search('numeroDepartement').text,
-          tribunal:
-            annonce.search('tribunal').text,
-          siren:
-            annonce.search('numeroIdentificationRCS').text,
-          code_rcs:
-            annonce.search('codeRCS').text,
-          nom_greffe_immat:
-            annonce.search('nomGreffeImmat').text,
-          denomination:
-            annonce.search('denomination').text,
-          sigle:
-            annonce.search('sigle').text,
-          forme_juridique:
-            annonce.search('formeJuridique').text,
-          date_commencement_activite:
-            annonce.search('dateCommencementActivite').text,
-          date_effet:
-            annonce.search('dateEffet').text,
-          descriptif:
-            annonce.search('descriptif').text,
-          denomination_pepm:
-            annonce.search('modificationsGenerales/precedentExploitantPM/denomination').text,
-          siren_pepm:
-            annonce.search('modificationsGenerales/precedentExploitantPM/numeroImmatriculation/numeroIdentification').text,
-          nature_pepp:
-            annonce.search('modificationsGenerales/precedentExploitantPP/nature').text,
-          nom_pepp:
-            annonce.search('modificationsGenerales/precedentExploitantPP/nom').text,
-          prenom_pepp:
-            annonce.search('modificationsGenerales/precedentExploitantPP/prenom').text,
-          nom_usage_pepp:
-            annonce.search('modificationsGenerales/precedentExploitantPP/nomUsage').text,
-          siren_pepp:
-            annonce.search('modificationsGenerales/precedentExploitantPP/numeroImmatriculation/numeroIdentification').text,
-          nom_publication_ap:
-            annonce.search('parutionAvisPrecedent/nomPublication').text,
-          numero_parution_ap:
-            annonce.search('parutionAvisPrecedent/numeroPublication').text,
-          date_parution_ap:
-            annonce.search('parutionAvisPrecedent/dateParution').text,
-          numero_annonce_ap:
-            annonce.search('parutionAvisPrecedent/numeroAnnonce').text,
-          file:
-            file.split('/').last,
-          type_bodacc:
-            'BODACC B',
-          annee_parution:
-            date,
-        )
+      if annonce.search('modificationsGenerales').blank?
+        Scrapper::RadiationAction.create(annonce, file, date)
       else
-        # rectify("Radiation", avis.search('typeAnnonce').children.to_s.gsub(%r{<>/}, '')\
-        # , avis.search('numeroIdentificationRCS').text)
-        Radiation.create( \
-          nojo:
-            annonce.search('nojo').text,
-          type_annonce:
-            annonce.search('typeAnnonce').children.to_s.gsub(%r{<>/}, ''),
-          numero_annonce:
-            annonce.search('numeroAnnonce').text,
-          numero_departement:
-            annonce.search('numeroDepartement').text,
-          tribunal:
-            annonce.search('tribunal').text,
-          siren:
-            annonce.search('numeroIdentificationRCS').text,
-          code_rcs:
-            annonce.search('codeRCS').text,
-          nom_greffe_immat:
-            annonce.search('nomGreffeImmat').text,
-          denomination:
-            annonce.search('denomination').text,
-          sigle:
-            annonce.search('sigle').text,
-          forme_juridique:
-            annonce.search('formeJuridique').text,
-          type_voie:
-            annonce.search('typeVoie').text,
-          numero_voie:
-            annonce.search('numeroVoie').text,
-          nom_voie:
-            annonce.search('nomVoie').text,
-          code_postal:
-            annonce.search('codePostal').text,
-          ville:
-            annonce.search('ville').text,
-          radiation_pm:
-            annonce.search('radiationPM').text,
-          date_cessation_activite_pp:
-            annonce.search('dateCessationActivitePP').text,
-          commentaire:
-            annonce.search('commentaire').text,
-          nom_publication_ap:
-            annonce.search('parutionAvisPrecedent/nomPublication').text,
-          numero_parution_ap:
-            annonce.search('parutionAvisPrecedent/numeroPublication').text,
-          date_parution_ap:
-            annonce.search('parutionAvisPrecedent/dateParution').text,
-          numero_annonce_ap:
-            annonce.search('parutionAvisPrecedent/numeroAnnonce').text,
-          file:
-            file.split('/').last,
-          type_bodacc:
-            'BODACC B',
-          annee_parution:
-            date,
-        )
+        Scrapper::ModificationAction.create(annonce, file, date)
       end
     end
     FileUtils.rm(file)
-    puts file.split('/').last + ' done'
-    next if ['.', '..'].include?(file)
   end
 end
 
@@ -456,10 +134,10 @@ agent = Mechanize.new # For Download
 
 # If we don't already have the past years Bodacc anouncements
 # we download all of them
-if Bilan.count.zero? || ARGV[0]
+if Bilan.count.zero? || years.include?(ARGV[0].to_i)
 
   # Let's scrap this page with Nokogiri and Mechanize
-  page = Nokogiri::HTML(open(url_archives)) # For Scrap
+  page = Nokogiri::HTML(open(url_archives))
 
   puts 'Downloading historical files...'.light_blue
 
@@ -468,8 +146,8 @@ if Bilan.count.zero? || ARGV[0]
     next if line.search('td/text()')[4].to_s.blank?
     file = line.search('td > a/text()').to_s.strip
 
-    # If you only want to insert a special year (ex: only 2015)
-    if ARGV[0] and years.include? ARGV[0].to_i
+    # If you only want to insert a special year
+    if years.include? ARGV[0].to_i
       next unless file.include? ARGV[0].to_s
     end
 
@@ -497,7 +175,7 @@ if Bilan.count.zero? || ARGV[0]
     FileUtils.rmtree Dir.glob('tmp/archives/*')
 
     # Files are now in xml format, ready to be send in database
-    # Insert announcements in database. All in private functions down here
+    # Insert announcements in database.
     puts 'Inserting in database...'.light_blue
     insert_all
   end
@@ -507,7 +185,11 @@ puts 'Historical announcements finished'.light_blue
 puts 'Starting to scrap actual year announcements...'.light_blue
 
 # Opening last_update file
-last_update = File.read('last_update.txt')
+last_update = if File.file?('last_update.txt')
+                File.read('last_update.txt')
+              else
+                11.years.ago
+              end
 
 # Nokogiri for xml scraping, Mechanize for file download
 page = Nokogiri::HTML(open(url))
@@ -523,23 +205,22 @@ page.search('//tr').each do |line|
   path = get_path(file)
 
   # Downloading them if not already
-  if date.to_datetime > last_update
-    agent.pluggable_parser.default = Mechanize::Download
-    agent.get(url + file).save(path)
+  next unless date.to_datetime > last_update
+  agent.pluggable_parser.default = Mechanize::Download
+  agent.get(url + file).save(path)
 
-    # Untar every files and remove all .taz file
-    system('tar -xf ' + path + ' -C ' + path.gsub(file, '') + '; rm ' + path)
+  # Untar every files and remove all .taz file
+  system('tar -xf ' + path + ' -C ' + path.gsub(file, '') + '; rm ' + path)
 
-    # Files are now in xml format, ready to be send in database
-    # Insert announcements in database. All in private functions down here
-    puts 'Inserting ' + file.split('/').last
-    insert_all
-  end
+  # Files are now in xml format, ready to be send in database
+  # Insert announcements in database.
+  puts 'Inserting ' + file.split('/').last
+  insert_all
 end
 
 # Saving the last time you insert bodacc announcements
-File.open('last_update.txt', 'w') {|f| f.write(Time.now) }
+File.open('last_update.txt', 'w') { |f| f.write(Time.now) }
 
-# Boaper did his Job, wish him a good day
+# Bodacc did his Job, wish him a good day
 puts 'Bodacc did his job!'.green
 puts 'Bye!'

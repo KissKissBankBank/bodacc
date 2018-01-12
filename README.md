@@ -1,6 +1,6 @@
 # Bodacc
 
-Boaper is a scraper application that scrape every Bodacc announcements (2008-actual) on the DILA website in a Postgresql database [Bodacc](https://echanges.dila.gouv.fr/OPENDATA/BODACC/)
+Bodacc is a scraper application that scrape every Bodacc announcements (2008-actual) on the DILA website in a Postgresql database [Bodacc](https://echanges.dila.gouv.fr/OPENDATA/BODACC/)
 
 ## Getting Started
 
@@ -28,20 +28,74 @@ $> pg_dump bodacc < database_dump
 
 The database is called "bodacc"
 
-### Launch scrapper
+```
+bodacc
+  ├── bilans
+  ├── immatriculations
+  ├── modifications
+  ├── pcls
+  └── radiations
+```
 
-The scrapper is a single Ruby file. Just launch it with Ruby
+### Launch scraper
+
+The scraper is a single Ruby file. Just launch it with Ruby
 
 ```
 $> ruby scraper.rb
-$> ruby scraper.rb 2015   // Download only 2015 announcements
 ```
+
+#### How to use it properly
+
+The first time you use the scraper execute this command
+
+```
+$> ruby scraper.rb
+```
+
+It will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last_update.txt datetime. Imagine you want to download just a specific year then launch the following command:
+
+```
+$> ruby scraper.rb 2015
+```
+
+### Structure
+
+This is the structure of the scraper
+
+```
+├── Gemfile
+├── Gemfile.lock
+├── README.md
+├── database_dump
+├── models
+│   ├── bilan.rb
+│   ├── immatriculation.rb
+│   ├── modification.rb
+│   ├── pcl.rb
+│   └── radiation.rb
+├── modules
+│   ├── bilan.rb
+│   ├── immatriculation.rb
+│   ├── modification.rb
+│   ├── pcl.rb
+│   └── radiation.rb
+├── scraper.rb
+└── tmp
+    ├── archives
+    └── xml
+        ├── BILAN
+        ├── PCL
+        ├── RCS-A
+        └── RCS-B
+```
+
 
 ## How it works
 
 Bodacc use the [Nokogiri](https://github.com/sparklemotion/nokogiri) gem and the [Mechanize](https://github.com/sparklemotion/nokogiri) gem in order to scrape and download every files. After unzipping them, the script insert them into the bodacc database
 
-If you use this scrapper for the first time be aware that inserting everything from 2008 to the year before actual will take a lot of time (you'll have time to watch the Star Wars saga with all the bonuses ... twice). In fact the files weigh about 300 MB and contain a total of just over 20 million announcements
+If you use this scraper for the first time be aware that inserting everything from 2008 to the year before actual will take a lot of time (you'll have time to watch the Star Wars saga with all the bonuses ... twice). In fact the files weigh about 300 MB and contain a total of just over 20 million announcements
 
 At the end, the script create a 'last_update.txt' file which contain the last time bodacc announcements were inserted into database preventing to download announcements that are already added.
 
