@@ -3,6 +3,7 @@ module Scrapper
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize
     def self.create(annonce, file, date)
+      t = annonce.search('typeAnnonce').children.to_s.gsub!(/[^0-9A-Za-z]/, '')
       Radiation.create( \
         nojo:
           annonce.search('nojo').text,
@@ -57,8 +58,21 @@ module Scrapper
         annee_parution:
           date,
       )
+      return if t != 'rectificatif'
+      rectify(annonce.search('parutionAvisPrecedent/numeroAnnonce').text,
+              annonce.search('numeroIdentificationRCS').text)
     end
     # rubocop:enable Metrics/MethodLength
     # rubocop:enable Metrics/AbcSize
+
+    # Rectify announcements
+    def self.rectify(numero_annonce_ap, siren)
+      to_delete = Radiation.where(numero_annonce: numero_annonce_ap,
+                                  type_annonce: 'annonce',
+                                  siren: siren)
+      return if to_delete.nil?
+      to_delete.delete_all
+      puts 'Announcement ' + numero_annonce_ap + ' has been deleted'
+    end
   end
 end

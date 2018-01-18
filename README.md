@@ -97,6 +97,8 @@ Bodacc use the [Nokogiri](https://github.com/sparklemotion/nokogiri) gem and the
 
 If you use this scraper for the first time be aware that inserting everything from 2008 to the year before actual will take a lot of time (you'll have time to watch the Star Wars saga with all the bonuses ... twice). In fact the files weigh about 300 MB and contain a total of just over 20 million announcements
 
+![](https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif)
+
 At the end, the script create a 'last_update.txt' file which contain the last time bodacc announcements were inserted into database preventing to download announcements that are already added.
 
 ## Built With
