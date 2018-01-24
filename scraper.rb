@@ -155,19 +155,19 @@ if Bilan.count.zero? || years.include?(ARGV[0].to_i)
     path = 'tmp/archives/'
 
     # Gonna catch them all !
-    puts 'Downloading announcements of ' + file.gsub(/[^0-9]/, '') + ' year'
+    puts "Downloading announcements of #{file.gsub(/[^0-9]/, '')} year"
     agent.pluggable_parser.default = Mechanize::Download
     agent.get(url_archives + file).save(path + file)
 
     # Untar the big folder containing compressed files (ex: BODACC_2008.tar)
-    puts 'Decompressing entire folder of ' + file.gsub(/[^0-9]/, '') + ' year'
-    system('tar -xf ' + path + file + ' -C ' + path + '')
+    puts "Decompressing entire folder of #{file.gsub(/[^0-9]/, '')} year"
+    system("tar -xf #{path}#{file} -C #{path}")
 
     # Untar every files and move them in their correct folder
     # (ex: RCS-A_BXA20080144.taz)
     Dir.glob('tmp/archives/**/**/*.taz*') do |thefile|
       if thefile.split('/').last.include? '_'
-        system('tar -xf ' + thefile + ' -C ' + get_path_archives(thefile) + '')
+        system("tar -xf #{thefile} -C #{get_path_archives(thefile)}")
       end
     end
 
@@ -188,13 +188,13 @@ puts 'Starting to scrap actual year announcements...'.light_blue
 last_update = if File.file?('last_update.txt')
                 File.read('last_update.txt')
               else
-                11.years.ago
+                years.first
               end
 
 # Nokogiri for xml scraping, Mechanize for file download
 page = Nokogiri::HTML(open(url))
 
-# Download every new files
+# Download every new file
 puts 'Downloading and decompresing files...'.light_blue
 page.search('//tr').each do |line|
   next if line.search('td/text()')[4].to_s.blank?
@@ -203,6 +203,7 @@ page.search('//tr').each do |line|
 
   # Init path depending on the file
   path = get_path(file)
+  next if path.nil?
 
   # Downloading them if not already
   next unless date.to_datetime > last_update
@@ -210,11 +211,12 @@ page.search('//tr').each do |line|
   agent.get(url + file).save(path)
 
   # Untar every files and remove all .taz file
-  system('tar -xf ' + path + ' -C ' + path.gsub(file, '') + '; rm ' + path)
+  system("tar -xf #{path} -C #{path.gsub(file, '')}")
+  FileUtils.rm(path)
 
   # Files are now in xml format, ready to be send in database
   # Insert announcements in database.
-  puts 'Inserting ' + file.split('/').last
+  puts "Inserting #{file.split('/').last}"
   insert_all
 end
 
