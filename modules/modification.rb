@@ -1,7 +1,6 @@
 module Scrapper
   class ModificationAction
     # rubocop:disable Metrics/MethodLength
-    # rubocop:disable Metrics/LineLength
     # rubocop:disable Metrics/AbcSize
     def self.create(annonce, file, date)
       type_annonce = annonce.search('
@@ -36,19 +35,35 @@ module Scrapper
         descriptif:
           annonce.search('descriptif').text,
         denomination_pepm:
-          annonce.search('modificationsGenerales/precedentExploitantPM/denomination').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPM/denomination',
+          ).text,
         siren_pepm:
-          annonce.search('modificationsGenerales/precedentExploitantPM/numeroImmatriculation/numeroIdentification').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPM/' \
+            'numeroImmatriculation/numeroIdentification',
+          ).text,
         nature_pepp:
-          annonce.search('modificationsGenerales/precedentExploitantPP/nature').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPP/nature',
+          ).text,
         nom_pepp:
-          annonce.search('modificationsGenerales/precedentExploitantPP/nom').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPP/nom',
+          ).text,
         prenom_pepp:
-          annonce.search('modificationsGenerales/precedentExploitantPP/prenom').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPP/prenom',
+          ).text,
         nom_usage_pepp:
-          annonce.search('modificationsGenerales/precedentExploitantPP/nomUsage').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPP/nomUsage',
+          ).text,
         siren_pepp:
-          annonce.search('modificationsGenerales/precedentExploitantPP/numeroImmatriculation/numeroIdentification').text,
+          annonce.search(
+            'modificationsGenerales/precedentExploitantPP/' \
+            'numeroImmatriculation/numeroIdentification',
+          ).text,
         nom_publication_ap:
           annonce.search('parutionAvisPrecedent/nomPublication').text,
         numero_parution_ap:
@@ -69,7 +84,6 @@ module Scrapper
               annonce.search('numeroIdentificationRCS').text)
     end
     # rubocop:enable Metrics/MethodLength
-    # rubocop:enable Metrics/LineLength
     # rubocop:enable Metrics/AbcSize
 
     # Rectify announcements
