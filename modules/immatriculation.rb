@@ -1,4 +1,5 @@
 module Scrapper
+  # rubocop:disable Metrics/ClassLength
   class ImmatriculationAction
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize
@@ -120,4 +121,5 @@ module Scrapper
       puts "Announcement #{numero_annonce_ap} has been deleted"
     end
   end
+  # rubocop:enable Metrics/ClassLength
 end
