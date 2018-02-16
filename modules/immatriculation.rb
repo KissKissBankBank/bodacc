@@ -3,9 +3,9 @@ module Scrapper
   class ImmatriculationAction
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize
-    def self.create(annonce, file, date, categorie, immat)
-      type_annonce = annonce.search('
-                        typeAnnonce').children.to_s.gsub!(/[^0-9A-Za-z]/, '')
+    def self.create(annonce, file, date, categorie)
+      type_annonce =
+        annonce.search('typeAnnonce').children.to_s.gsub!(/[^0-9A-Za-z]/, '')
       Immatriculation.create(
         nojo:
           annonce.search('nojo').text,
@@ -66,7 +66,7 @@ module Scrapper
         categorie:
           categorie,
         immatriculation:
-          immat,
+          categorie,
         nom_publication_ap:
           annonce.search('parutionAvisPrecedent/nomPublication').text,
         numero_parution_ap:
@@ -89,26 +89,14 @@ module Scrapper
     # rubocop:enable Metrics/MethodLength
     # rubocop:enable Metrics/AbcSize
 
-    def self.categorie(annonce)
-      categorie = if annonce.search('categorieVente').present?
-                    'Vente'
-                  elsif annonce.search('categorieCreation').present?
-                    'Creation'
-                  else
-                    'Immatriculation'
-                  end
-      categorie
-    end
-
-    def self.immat(annonce)
-      immat = if annonce.search('categorieVente').present?
-                'Vente'
-              elsif annonce.search('categorieCreation').present?
-                'Creation'
-              else
-                'Immatriculation'
-              end
-      immat
+    def self.categorie_immat(annonce)
+      if annonce.search('categorieVente').present?
+        'Vente'
+      elsif annonce.search('categorieCreation').present?
+        'Creation'
+      else
+        'Immatriculation'
+      end
     end
 
     # Rectify announcements

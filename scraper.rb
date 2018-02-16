@@ -71,10 +71,9 @@ def insert_rcsa
     xml = Nokogiri::XML(open(file))
     xml.xpath('//avis').each do |annonce|
       date = xml.xpath('//dateParution').first.text.to_datetime
-      categorie = Scrapper::ImmatriculationAction.categorie(annonce)
-      immat = Scrapper::ImmatriculationAction.immat(annonce)
+      categorie_i = Scrapper::ImmatriculationAction.categorie_immat(annonce)
       Scrapper::ImmatriculationAction.create(annonce, file, date, \
-                                             categorie, immat)
+                                             categorie_i)
     end
     FileUtils.rm(file)
   end
@@ -100,30 +99,28 @@ end
 # (ex: BILAN_BXC20080050.xml go to "tmp/xml/BILAN/BILAN_BXC20080050.xml")
 def get_path(file)
   if file.to_s.include? 'BILAN'
-    path = 'tmp/xml/BILAN/' + file
+    'tmp/xml/BILAN/' + file
   elsif file.to_s.include? 'RCS-A'
-    path = 'tmp/xml/RCS-A/' + file
+    'tmp/xml/RCS-A/' + file
   elsif file.to_s.include? 'RCS-B'
-    path = 'tmp/xml/RCS-B/' + file
+    'tmp/xml/RCS-B/' + file
   elsif file.to_s.include? 'PCL'
-    path = 'tmp/xml/PCL/' + file
+    'tmp/xml/PCL/' + file
   end
-  path
 end
 
 # Return the correct path depending on the file type
 # (ex: BILAN_BXC20080050.xml go to "tmp/xml/BILAN/")
 def get_path_archives(file)
   if file.to_s.include? 'BILAN'
-    path = 'tmp/xml/BILAN/'
+    'tmp/xml/BILAN/'
   elsif file.to_s.include? 'RCS-A'
-    path = 'tmp/xml/RCS-A/'
+    'tmp/xml/RCS-A/'
   elsif file.to_s.include? 'RCS-B'
-    path = 'tmp/xml/RCS-B/'
+    'tmp/xml/RCS-B/'
   elsif file.to_s.include? 'PCL'
-    path = 'tmp/xml/PCL/'
+    'tmp/xml/PCL/'
   end
-  path
 end
 
 # Url

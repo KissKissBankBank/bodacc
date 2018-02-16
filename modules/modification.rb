@@ -3,8 +3,8 @@ module Scrapper
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize
     def self.create(annonce, file, date)
-      type_annonce = annonce.search('
-                      typeAnnonce').children.to_s.gsub!(/[^0-9A-Za-z]/, '')
+      type_annonce =
+        annonce.search('typeAnnonce').children.to_s.gsub!(/[^0-9A-Za-z]/, '')
       Modification.create(
         nojo:
           annonce.search('nojo').text,
