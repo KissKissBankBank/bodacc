@@ -1,4 +1,4 @@
-module Scrapper
+module Scraper
   class RadiationAction
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize

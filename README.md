@@ -23,7 +23,7 @@ $ bundle install
 The repository include a dump of the empty database called "database_dump". Create your database with it by running the following command:
 
 ```sh
-$ pg_dump bodacc < database_dump
+$ pg_dump bodacc < database_dump.sql
 ```
 
 The database is called "bodacc"
@@ -42,7 +42,7 @@ bodacc
 The scraper is a single Ruby file. Just launch it with Ruby
 
 ```sh
-$ ruby scraper.rb
+$ ruby main.rb
 ```
 
 #### How to use it properly
@@ -50,13 +50,13 @@ $ ruby scraper.rb
 The first time you use the scraper execute this command
 
 ```sh
-$ ruby scraper.rb
+$ ruby main.rb
 ```
 
 It will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last_update.txt datetime. Imagine you want to download just a specific year then launch the following command:
 
 ```sh
-$ ruby scraper.rb 2015
+$ ruby main.rb 2015
 ```
 
 ### Structure
@@ -79,8 +79,9 @@ This is the structure of the scraper
 │   ├── immatriculation.rb
 │   ├── modification.rb
 │   ├── pcl.rb
-│   └── radiation.rb
-├── scraper.rb
+│   ├── radiation.rb
+│   └── scraper.rb
+├── main.rb
 └── tmp
     ├── archives
     └── xml

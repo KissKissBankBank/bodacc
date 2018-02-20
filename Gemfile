@@ -18,7 +18,7 @@ gem 'pg'
 gem 'rubocop'
 
 # Ruby ORM
-gem 'active_record'
+gem 'activerecord'
 
 # Terminal library
 gem 'fileutils'

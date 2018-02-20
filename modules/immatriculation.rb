@@ -1,5 +1,5 @@
-module Scrapper
-  # rubocop:disable Metrics/ClassLength
+module Scraper
+    # rubocop:disable Metrics/ClassLength
   class ImmatriculationAction
     # rubocop:disable Metrics/MethodLength
     # rubocop:disable Metrics/AbcSize
