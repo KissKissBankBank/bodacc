@@ -20,6 +20,10 @@ require_relative 'modules/modification'
 require_relative 'modules/radiation'
 require_relative 'modules/immatriculation'
 require_relative 'modules/scraper'
+require_relative 'modules/archives'
+require_relative 'modules/actual'
+
+require_relative 'services/downloader'
 
 # Establishing connection
 ActiveRecord::Base.establish_connection(
