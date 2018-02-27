@@ -1,5 +1,5 @@
 module Scraper
-  class ScraperAction
+  class Core
     # rubocop:disable Metrics/AbcSize
     def self.execute
       # Accepted years
@@ -9,18 +9,15 @@ module Scraper
       # we download all of them
       if Bilan.count.zero? || years.include?(ARGV[0].to_i)
         puts 'Downloading historical files...'.light_blue
-        Scraper::Scrape.archives(years)
+        Services::ScrapeArchives.execute(years)
         puts 'Inserting in database...'
         insert_all
         puts 'Historical announcements finished'.light_blue
       end
       puts 'Starting to scrap actual year announcements...'.light_blue
-      Scraper::Scrape.actual(years)
+      Services::ScrapeActual.execute(years)
       puts 'Inserting in database...'
       insert_all
-
-      # Saving the last time you insert bodacc announcements
-      File.open('last_update', 'w') { |f| f.write(Time.now) }
 
       # Bodacc did his Job, wish him a good day
       puts 'Bodacc did his job!'.green

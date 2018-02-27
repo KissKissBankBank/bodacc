@@ -20,18 +20,15 @@ require_relative 'modules/modification'
 require_relative 'modules/radiation'
 require_relative 'modules/immatriculation'
 require_relative 'modules/scraper'
-require_relative 'modules/archives'
-require_relative 'modules/actual'
 
+# Require services
 require_relative 'services/downloader'
+require_relative 'services/archives'
+require_relative 'services/actual'
 
 # Establishing connection
-ActiveRecord::Base.establish_connection(
-  adapter:  'postgresql', # or 'mysql2' or 'sqlite3'
-  database: 'bodacc',
-  username: '',
-  password: '',
-  host:     'localhost',
-)
+ActiveRecord::Base.establish_connection(ENV["DATABASE_URL"])
+ActiveRecord::Base.logger = Logger.new(STDOUT)
 
-Scraper::ScraperAction.execute
+# Execute the scraper
+Scraper::Core.execute

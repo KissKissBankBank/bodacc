@@ -1,7 +1,7 @@
-module Scraper
-  class Scrape
+module Services
+  class ScrapeActual
     # rubocop:disable Metrics/AbcSize
-    def self.actual(years)
+    def self.execute(years)
       # Url
       url = "https://echanges.dila.gouv.fr/OPENDATA/BODACC/#{Time.now.year}/"
 
@@ -34,10 +34,11 @@ module Scraper
     end
 
     def self.find_last_update?(years)
-      if File.file?('last_update')
-        File.read('last_update')
+      last_modification = Modification.last
+      if last_modification.nil?
+          years
       else
-        years.first
+          last_modification.created_at
       end
     end
 

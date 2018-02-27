@@ -1,7 +1,7 @@
-module Scraper
-  class Scrape
+module Services
+  class ScrapeArchives
     # rubocop:disable Metrics/AbcSize
-    def self.archives(years)
+    def self.execute(years)
       url_archives = 'https://echanges.dila.gouv.fr/OPENDATA/BODACC/FluxHistorique/'
       page = Nokogiri::HTML(open(url_archives))
       # Iterate on every <tr> of the table that contain every files
