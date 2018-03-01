@@ -4,7 +4,7 @@ require 'date'
 require 'mechanize'
 require 'net/http'
 require 'open-uri'
-require 'pg' # or 'mysql2' or 'sqlite3'
+require 'pg'
 
 # Require models
 require_relative 'models/bilan'

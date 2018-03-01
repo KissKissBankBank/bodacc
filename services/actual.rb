@@ -23,7 +23,7 @@ class Actual
 
       # Downloading them if not already
       next unless date.to_datetime > last_update
-      Services::Downloader.execute(url + file, file, path)
+      Downloader.execute(url + file, file, path)
 
       # Untar every files and remove all .taz file
       system("tar -xf #{path} -C #{path.gsub(file, '')}")

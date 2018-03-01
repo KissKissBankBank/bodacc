@@ -17,7 +17,7 @@ class Archives
       path = 'tmp/archives/'
 
       # Gonna catch them all !
-      Services::Downloader.execute(url_archives + file, file, path + file)
+      Downloader.execute(url_archives + file, file, path + file)
 
       # puts "Decompressing entire folder of #{file.gsub(/[^0-9]/, '')} year"
       system("tar -xf #{path}#{file} -C #{path}")
