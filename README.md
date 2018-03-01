@@ -53,7 +53,7 @@ The first time you use the scraper execute this command
 $ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb
 ```
 
-It will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last_update.txt datetime. Imagine you want to download just a specific year then launch the following command:
+It will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last created_at datetime. Imagine you want to download just a specific year then launch the following command:
 
 ```sh
 $ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb 2015
