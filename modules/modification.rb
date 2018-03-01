@@ -1,6 +1,7 @@
 module InsertModification
   # rubocop:disable Metrics/MethodLength
   # rubocop:disable Metrics/AbcSize
+  # rubocop:disable Style/TrailingCommaInArguments
   def self.execute(annonce, file, date)
     type_annonce =
       annonce.search('typeAnnonce').children.to_s.gsub!(/[^0-9A-Za-z]/, '')
@@ -35,33 +36,33 @@ module InsertModification
         annonce.search('descriptif').text,
       denomination_pepm:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPM/denomination',
+          'modificationsGenerales/precedentExploitantPM/denomination'
         ).text,
       siren_pepm:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPM/', \
-          'numeroImmatriculation/numeroIdentification',
+          'modificationsGenerales/precedentExploitantPM/' \
+          'numeroImmatriculation/numeroIdentification'
         ).text,
       nature_pepp:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPP/nature',
+          'modificationsGenerales/precedentExploitantPP/nature'
         ).text,
       nom_pepp:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPP/nom',
+          'modificationsGenerales/precedentExploitantPP/nom'
         ).text,
       prenom_pepp:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPP/prenom',
+          'modificationsGenerales/precedentExploitantPP/prenom'
         ).text,
       nom_usage_pepp:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPP/nomUsage',
+          'modificationsGenerales/precedentExploitantPP/nomUsage'
         ).text,
       siren_pepp:
         annonce.search(
-          'modificationsGenerales/precedentExploitantPP/', \
-          'numeroImmatriculation/numeroIdentification',
+          'modificationsGenerales/precedentExploitantPP/' \
+          'numeroImmatriculation/numeroIdentification'
         ).text,
       nom_publication_ap:
         annonce.search('parutionAvisPrecedent/nomPublication').text,
@@ -84,6 +85,7 @@ module InsertModification
   end
   # rubocop:enable Metrics/MethodLength
   # rubocop:enable Metrics/AbcSize
+  # rubocop:enable Style/TrailingCommaInArguments
 
   # Rectify announcements
   def self.rectify(numero_annonce_ap, siren)
