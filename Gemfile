@@ -20,6 +20,3 @@ gem 'activerecord'
 
 # Transform url into connection for AR
 gem 'activerecord_url_connections'
-
-# Terminal library
-gem 'fileutils'
