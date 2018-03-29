@@ -3,13 +3,15 @@ set -e
 
 create_database() {
     echo "CREATE DATABASE"
-    psql bodacc < structure.sql
+    createdb $PGDATABASE
+    psql < structure.sql
 }
 
 launch_script() {
     create_database
     echo "LAUNCH SCRAPER"
-    ruby main.rb
+    bundle exec ruby main.rb
 }
 
+sleep 10
 launch_script
