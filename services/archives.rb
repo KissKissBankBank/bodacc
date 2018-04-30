@@ -1,6 +1,16 @@
 class Archives
+  DIRS = %w[
+    tmp/xml/BILAN
+    tmp/xml/RCS-A
+    tmp/xml/RCS-B
+    tmp/xml/PCL
+    tmp/archives
+  ].freeze
+
   # rubocop:disable Metrics/AbcSize
   def self.scrape(years)
+    ensure_directories(DIRS)
+
     url_archives = 'https://echanges.dila.gouv.fr/OPENDATA/BODACC/FluxHistorique/'
     page = Nokogiri::HTML(open(url_archives))
     # Iterate on every <tr> of the table that contain every files
@@ -49,6 +59,12 @@ class Archives
       'tmp/xml/RCS-B/'
     elsif file.to_s.include? 'PCL'
       'tmp/xml/PCL/'
+    end
+  end
+
+  def self.ensure_directories(directories)
+    directories.each do |directory|
+      FileUtils.mkdir_p(directory) unless File.exists?(directory)
     end
   end
 end

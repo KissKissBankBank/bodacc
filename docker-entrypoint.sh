@@ -2,8 +2,13 @@
 set -e
 
 create_database() {
-    echo "CREATE DATABASE"
-    createdb $PGDATABASE
+    if psql -lqt | cut -d \| -f 1 | grep -qw $PGDATABASE; then
+      echo "DATABASE ALREADY EXIST"
+    else
+      echo "CREATE DATABASE"
+      createdb $PGDATABASE
+    fi
+
     psql < structure.sql
 }
 

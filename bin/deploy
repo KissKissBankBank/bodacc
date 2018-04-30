@@ -1,0 +1,24 @@
+#!/bin/bash
+
+# Download aws
+# pip install awscli
+# Download ecs-cli: http://docs.aws.amazon.com/AmazonECS/latest/developerguide/ECS_CLI_installation.html
+
+# Login docker to aws ecr
+`aws ecr get-login --no-include-email --region eu-west-1 --profile kkbb2014`
+
+ECR_IMAGE_URL=527447458372.dkr.ecr.eu-west-1.amazonaws.com/data-tools:bodacc
+
+# Build local image
+docker-compose build
+sed 's,build: \.,image: '"$ECR_IMAGE_URL"',g' docker-compose.yml > ecs-compose.yml
+
+
+# Copy local image to remote ecr
+docker tag bodacc_bodacc:latest $ECR_IMAGE_URL
+docker push $ECR_IMAGE_URL
+
+# Stop running service
+ecs-cli compose -f ecs-compose.yml --project-name bodacc service --cluster Datascience stop
+# Launch service
+ecs-cli compose -f ecs-compose.yml --project-name bodacc service --cluster Datascience up
