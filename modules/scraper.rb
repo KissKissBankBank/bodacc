@@ -7,10 +7,9 @@ module Scraper
     # If we don't already have the past years Bodacc anouncements
     # we download all of them
     if Bilan.count.zero? || years.include?(ARGV[0].to_i)
+      puts "Scraper changed, this is a new one".green    
       puts 'Downloading historical files...'.light_blue
       Archives.scrape(years)
-      puts 'Inserting in database...'
-      insert_all
       puts 'Historical announcements finished'.light_blue
     end
     puts 'Starting to scrap actual year announcements...'.light_blue

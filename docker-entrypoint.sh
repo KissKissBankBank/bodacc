@@ -7,9 +7,8 @@ create_database() {
     else
       echo "CREATE DATABASE"
       createdb $PGDATABASE
+      psql $PGDATABASE < structure.sql
     fi
-
-    psql < structure.sql
 }
 
 launch_script() {

@@ -34,6 +34,9 @@ class Archives
 
       # Untar every files and delete he empty folder
       untar
+
+      # Insert in database
+      Scraper.insert_all
     end
   end
   # rubocop:enable Metrics/AbcSize
