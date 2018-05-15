@@ -35,7 +35,7 @@ class Actual
   def self.find_last_update?(years)
     last_modification = Modification.last
     if last_modification.nil?
-      years
+      Time.utc(Time.new.year)
     else
       last_modification.created_at
     end

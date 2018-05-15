@@ -7,7 +7,7 @@ module Scraper
     # If we don't already have the past years Bodacc anouncements
     # we download all of them
     if Bilan.count.zero? || years.include?(ARGV[0].to_i)
-      puts "Scraper changed, this is a new one".green    
+      puts "Scraper changed, this is a new one".green
       puts 'Downloading historical files...'.light_blue
       Archives.scrape(years)
       puts 'Historical announcements finished'.light_blue
@@ -39,6 +39,7 @@ module Scraper
       date = xml.xpath('//dateParution').first.text.to_datetime
       xml.xpath('//avis').each do |avis|
         InsertBilan.execute(avis, file, date)
+        puts "Inserting #{file}"
       end
       FileUtils.rm(file)
     end
@@ -51,6 +52,7 @@ module Scraper
       date = xml.xpath('//dateParution').first.text.to_datetime
       xml.xpath('//annonce').each do |annonce|
         InsertPcl.execute(annonce, file, date)
+        puts "Inserting #{file}"
       end
       FileUtils.rm(file)
     end
@@ -65,6 +67,7 @@ module Scraper
         categorie_i = InsertImmatriculation.categorie_immat(annonce)
         InsertImmatriculation.execute(annonce, file, date, \
                                       categorie_i)
+                                      puts "Inserting #{file}"
       end
       FileUtils.rm(file)
     end
@@ -81,6 +84,7 @@ module Scraper
         else
           InsertModification.execute(annonce, file, date)
         end
+        puts "Inserting #{file}"
       end
       FileUtils.rm(file)
     end

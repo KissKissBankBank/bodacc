@@ -28,7 +28,6 @@ require_relative 'services/actual'
 
 # Establishing connection
 ActiveRecord::Base.establish_connection(ENV['DATABASE_URL'])
-ActiveRecord::Base.logger = Logger.new(STDOUT)
 
 # Execute the scraper
 Scraper.execute
