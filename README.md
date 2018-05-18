@@ -63,7 +63,7 @@ $ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb 2015
 
 Bodacc use the [Nokogiri](https://github.com/sparklemotion/nokogiri) gem and the [Mechanize](https://github.com/sparklemotion/nokogiri) gem in order to scrape and download every files. After unzipping them, the script inserts them into the bodacc database.
 
-If you use this scraper for the first time be aware that inserting everything from 2008 to the year before actual will take a lot of time (you'll have time to watch the Star Wars saga with all the bonuses ... twice). In fact the files weigh about 300 MB and contain a total of just over 20 million announcements.
+If you use this scraper for the first time be aware that inserting everything from 2008 to the year before actual will take a lot of time (you'll have time to watch the Star Wars saga with all the bonuses ... twice). In fact the files weigh about 2-3 GB !!!
 
 ![](https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif)
 
