@@ -14,7 +14,7 @@ class Actual
     puts 'Downloading and decompresing files...'.light_blue
     page.search('//tr').each do |line|
       next if line.search('td/text()')[4].to_s.blank?
-      date = line.search('td/text()')[4].to_s.strip
+      date = line.search('td/text()')[4].to_s.strip.to_datetime
       file = line.search('td > a/text()').to_s.strip
 
       # Init path depending on the file
@@ -22,12 +22,15 @@ class Actual
       next if path.nil?
 
       # Downloading them if not already
-      next unless date.to_datetime > last_update
-      Downloader.execute(url + file, file, path)
+      if (date.strftime("%Y-%m-%d") > last_update) or
+           (last_update == Time.now)
+          Downloader.execute(url + file, file, path)
 
-      # Untar every files and remove all .taz file
-      system("tar -xf #{path} -C #{path.gsub(file, '')}")
-      FileUtils.rm(path)
+          # Untar every files and remove all .taz file
+          system("tar -xf #{path} -C #{path.gsub(file, '')}")
+          FileUtils.rm(path)
+      end
+
     end
     # rubocop:enable Metrics/AbcSize
   end
@@ -35,9 +38,9 @@ class Actual
   def self.find_last_update?(years)
     last_modification = Modification.last
     if last_modification.nil?
-      Time.utc(Time.new.year)
+      return Time.now
     else
-      last_modification.created_at
+      return last_modification.annee_parution.to_datetime.strftime("%Y-%m-%d")
     end
   end
 

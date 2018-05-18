@@ -39,8 +39,8 @@ module Scraper
       date = xml.xpath('//dateParution').first.text.to_datetime
       xml.xpath('//avis').each do |avis|
         InsertBilan.execute(avis, file, date)
-        puts "Inserting #{file}"
       end
+      puts "Inserting #{file}"
       FileUtils.rm(file)
     end
   end
@@ -52,8 +52,8 @@ module Scraper
       date = xml.xpath('//dateParution').first.text.to_datetime
       xml.xpath('//annonce').each do |annonce|
         InsertPcl.execute(annonce, file, date)
-        puts "Inserting #{file}"
       end
+      puts "Inserting #{file}"
       FileUtils.rm(file)
     end
   end
@@ -67,8 +67,8 @@ module Scraper
         categorie_i = InsertImmatriculation.categorie_immat(annonce)
         InsertImmatriculation.execute(annonce, file, date, \
                                       categorie_i)
-                                      puts "Inserting #{file}"
       end
+      puts "Inserting #{file}"
       FileUtils.rm(file)
     end
   end
@@ -84,8 +84,8 @@ module Scraper
         else
           InsertModification.execute(annonce, file, date)
         end
-        puts "Inserting #{file}"
       end
+      puts "Inserting #{file}"
       FileUtils.rm(file)
     end
   end
