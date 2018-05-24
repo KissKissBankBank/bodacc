@@ -1,32 +1,30 @@
 # Bodacc
-
 Bodacc is a scraper application that scrape every Bodacc announcements (2008-actual) on the DILA website in a Postgresql database [Bodacc](https://echanges.dila.gouv.fr/OPENDATA/BODACC/)
 
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
-
 ### Prerequisites
 
-Be sure to have Ruby >= 2.3.4
+Be sure to have Ruby >= 2.3.4 and Docker
 
 ### Installing gems
 
 Clone the repository and install all necessary gem by running the following command:
 
 ```sh
-$ bundle install
+$> bundle install
 ```
 
-### Intalling database
+### Launch scraper (local sans docker)
 
-The repository include a dump of the empty database called "database_dump". Create your database with it by running the following command:
+The repository include a dump of the empty database called "structure.sql". Create your database with it by running the following command:
 
 ```sh
 $ pg_dump bodacc < structure.sql
 ```
 
-The database is called "bodacc"
+The database is "bodacc"
 
 ```
 bodacc
@@ -37,29 +35,26 @@ bodacc
   └── radiations
 ```
 
-### Launch scraper
-
-The scraper is a single Ruby file. Just launch it with Ruby. For exemple
-
+Then you just have to launch the script:
 ```sh
 $ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb
+$ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb 2009
 ```
 
-#### How to use it properly
-
-The first time you use the scraper execute this command
+### Launch scraper (local docker)
 
 ```sh
-$ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb
+$ docker-compose build
+$ docker run <tag name>
 ```
 
-It will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last created_at datetime. Imagine you want to download just a specific year then launch the following command:
-
+#### Launch scraper (production docker)
 ```sh
-$ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb 2015
+$ bin/deploy
 ```
-
 ## How it works
+
+The first time you use the scraper it will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last `annee_parution` datetime.
 
 Bodacc use the [Nokogiri](https://github.com/sparklemotion/nokogiri) gem and the [Mechanize](https://github.com/sparklemotion/nokogiri) gem in order to scrape and download every files. After unzipping them, the script inserts them into the bodacc database.
 
@@ -67,6 +62,8 @@ If you use this scraper for the first time be aware that inserting everything fr
 
 ![](https://media.giphy.com/media/l0HlBO7eyXzSZkJri/giphy.gif)
 
-## Authors
+## Possible errors
 
-* **Castres Maxime** - *Initial work* - [Mcastres](https://github.com/Mcastres)
+Based on a maintained site, the scraper may not work in many cases:
+  - The url is note the same anymore `https://echanges.dila.gouv.fr/OPENDATA/BODACC/<year>`, if this is the case, change it inside `services/actual.rb and archives.rb`
+  - Not enough space on the server ?
