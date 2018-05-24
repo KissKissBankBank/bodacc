@@ -61,7 +61,7 @@ module InsertPcl
         file.split('/').last,
       type_bodacc:
         'BODACC A',
-      annee_parution:
+      parution_at:
         date,
     )
     return if type_annonce != 'rectificatif'

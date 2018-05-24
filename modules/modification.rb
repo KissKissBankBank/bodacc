@@ -76,7 +76,7 @@ module InsertModification
         file.split('/').last,
       type_bodacc:
         'BODACC B',
-      annee_parution:
+      parution_at:
         date,
     )
     return if type_annonce != 'rectificatif'

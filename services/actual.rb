@@ -40,7 +40,7 @@ class Actual
     if last_modification.nil?
       return Time.now
     else
-      return last_modification.annee_parution.to_datetime.strftime("%Y-%m-%d")
+      return last_modification.parution_at.to_datetime.strftime("%Y-%m-%d")
     end
   end
 

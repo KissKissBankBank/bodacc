@@ -57,7 +57,7 @@ module InsertBilan
         file.split('/').last,
       type_bodacc:
         'BODACC C',
-      annee_parution:
+      parution_at:
         date,
     )
     return if type_annonce != 'rectificatif'

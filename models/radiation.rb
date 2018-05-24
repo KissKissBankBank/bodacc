@@ -24,5 +24,5 @@ class Radiation < ActiveRecord::Base
   # numero_annonce_ap:
   # file:
   # type_bodacc:
-  # annee_parution:
+  # parution_at:
 end

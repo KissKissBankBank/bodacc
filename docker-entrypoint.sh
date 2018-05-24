@@ -2,10 +2,10 @@
 set -e
 
 create_database() {
-    if psql -lqt | cut -d \| -f 1 | grep -qw $PGDATABASE; then
+    if psql -l | grep bodacc_production | wc -l; then
       echo "DATABASE ALREADY EXIST"
     else
-      echo "CREATE DATABASE"
+      echo "CREATE DATABASE ;"
       createdb $PGDATABASE
       psql $PGDATABASE < structure.sql
     fi

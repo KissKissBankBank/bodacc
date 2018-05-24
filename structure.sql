@@ -77,7 +77,7 @@ CREATE TABLE bilans (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    annee_parution character varying,
+    parution_at character varying,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -143,7 +143,7 @@ CREATE TABLE immatriculations (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    annee_parution character varying,
+    parution_at character varying,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -200,7 +200,7 @@ CREATE TABLE modifications (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    annee_parution character varying,
+    parution_at character varying,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -258,7 +258,7 @@ CREATE TABLE pcls (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    annee_parution character varying,
+    parution_at character varying,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -313,7 +313,7 @@ CREATE TABLE radiations (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    annee_parution character varying,
+    parution_at character varying,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -388,35 +388,35 @@ environment	development	2017-12-19 15:13:10.813312	2017-12-19 15:13:10.813312
 --
 --
 
-COPY bilans (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, numero_voie, type_voie, nom_voie, compl_geographique, code_postal, ville, date_cloture, type_depot, descriptif, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, annee_parution, updated_at, created_at) FROM stdin;
+COPY bilans (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, numero_voie, type_voie, nom_voie, compl_geographique, code_postal, ville, date_cloture, type_depot, descriptif, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, parution_at, updated_at, created_at) FROM stdin;
 \.
 
 
 --
 --
 
-COPY immatriculations (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, administration, montant_capital, devise, forme_juridique, numero_voie, type_voie, nom_voie, code_postal, ville, origine_fonds, qualite_etablissement, activite, date_immatriculation, date_commencement_activite, descriptif, date_effet, journal, opposition, declaration_creance, categorie, immatriculation, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, annee_parution, updated_at, created_at) FROM stdin;
+COPY immatriculations (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, administration, montant_capital, devise, forme_juridique, numero_voie, type_voie, nom_voie, code_postal, ville, origine_fonds, qualite_etablissement, activite, date_immatriculation, date_commencement_activite, descriptif, date_effet, journal, opposition, declaration_creance, categorie, immatriculation, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, parution_at, updated_at, created_at) FROM stdin;
 \.
 
 
 --
 --
 
-COPY modifications (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, date_commencement_activite, date_effet, descriptif, denomination_pepm, siren_pepm, nature_pepp, nom_pepp, prenom_pepp, nom_usage_pepp, siren_pepp, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, annee_parution, updated_at, created_at) FROM stdin;
+COPY modifications (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, date_commencement_activite, date_effet, descriptif, denomination_pepm, siren_pepm, nature_pepp, nom_pepp, prenom_pepp, nom_usage_pepp, siren_pepp, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, parution_at, updated_at, created_at) FROM stdin;
 \.
 
 
 --
 --
 
-COPY pcls (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, identifiant_client, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, numero_voie, type_voie, nom_voie, compl_geographique, code_postal, ville, famille, nature, date_jugement, compl_jugement, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, annee_parution, updated_at, created_at) FROM stdin;
+COPY pcls (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, identifiant_client, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, numero_voie, type_voie, nom_voie, compl_geographique, code_postal, ville, famille, nature, date_jugement, compl_jugement, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, parution_at, updated_at, created_at) FROM stdin;
 \.
 
 
 --
 --
 
-COPY radiations (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, numero_voie, type_voie, nom_voie, code_postal, ville, radiation_pm, date_cessation_activite_pp, commentaire, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, annee_parution, updated_at, created_at) FROM stdin;
+COPY radiations (id, nojo, type_annonce, numero_annonce, numero_departement, tribunal, siren, code_rcs, nom_greffe_immat, denomination, sigle, forme_juridique, numero_voie, type_voie, nom_voie, code_postal, ville, radiation_pm, date_cessation_activite_pp, commentaire, nom_publication_ap, numero_parution_ap, date_parution_ap, numero_annonce_ap, file, type_bodacc, parution_at, updated_at, created_at) FROM stdin;
 \.
 
 
