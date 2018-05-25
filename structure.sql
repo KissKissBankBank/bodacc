@@ -77,7 +77,7 @@ CREATE TABLE bilans (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    parution_at character varying,
+    parution_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -143,7 +143,7 @@ CREATE TABLE immatriculations (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    parution_at character varying,
+    parution_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -200,7 +200,7 @@ CREATE TABLE modifications (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    parution_at character varying,
+    parution_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -258,7 +258,7 @@ CREATE TABLE pcls (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    parution_at character varying,
+    parution_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
@@ -313,7 +313,7 @@ CREATE TABLE radiations (
     numero_annonce_ap character varying,
     file character varying,
     type_bodacc character varying,
-    parution_at character varying,
+    parution_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     created_at timestamp without time zone NOT NULL
 );
