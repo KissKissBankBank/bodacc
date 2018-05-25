@@ -1,5 +1,5 @@
 # Bodacc
-Bodacc is a scraper application that scrape every Bodacc announcements (2008-actual) on the DILA website in a Postgresql database [Bodacc](https://echanges.dila.gouv.fr/OPENDATA/BODACC/)
+Bodacc is a scraper application that scrape every Bodacc announcements (2008-actual year) on the DILA website in a Postgresql database [Bodacc](https://echanges.dila.gouv.fr/OPENDATA/BODACC/)
 
 ## Getting Started
 
@@ -16,7 +16,7 @@ Clone the repository and install all necessary gem by running the following comm
 $> bundle install
 ```
 
-### Launch scraper (local sans docker)
+### Launch scraper (local without docker)
 
 The repository include a dump of the empty database called "structure.sql". Create your database with it by running the following command:
 
@@ -24,7 +24,7 @@ The repository include a dump of the empty database called "structure.sql". Crea
 $ pg_dump bodacc < structure.sql
 ```
 
-The database is "bodacc"
+The database is `bodacc`
 
 ```
 bodacc
@@ -41,20 +41,22 @@ $ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb
 $ DATABASE_URL=postgres://localhost:5432/bodacc ruby main.rb 2009
 ```
 
-### Launch scraper (local docker)
+### Launch scraper (local with docker)
 
 ```sh
 $ docker-compose build
 $ docker run <tag name>
 ```
 
-#### Launch scraper (production docker)
+### Launch scraper (production with docker)
+
+Create a `docker-compose.yml` including all your configurations
 ```sh
 $ bin/deploy
 ```
 ## How it works
 
-The first time you use the scraper it will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last `annee_parution` datetime.
+The first time you use the scraper it will download every bodacc announcements from 2008 to now. After that, if you launch the same command again, it will only download announcements that were posted after the last `parution_at` datetime.
 
 Bodacc use the [Nokogiri](https://github.com/sparklemotion/nokogiri) gem and the [Mechanize](https://github.com/sparklemotion/nokogiri) gem in order to scrape and download every files. After unzipping them, the script inserts them into the bodacc database.
 
@@ -65,5 +67,6 @@ If you use this scraper for the first time be aware that inserting everything fr
 ## Possible errors
 
 Based on a maintained site, the scraper may not work in many cases:
-  - The url is note the same anymore `https://echanges.dila.gouv.fr/OPENDATA/BODACC/<year>`, if this is the case, change it inside `services/actual.rb and archives.rb`
+  - The url is note the same anymore `https://echanges.dila.gouv.fr/OPENDATA/BODACC/<actual year>`, if this is the case, change it inside `services/actual.rb`
+  - The url is note the same anymore `https://echanges.dila.gouv.fr/OPENDATA/BODACC/FluxHistoriques`, if this is the case, change it inside `services/archives.rb`
   - Not enough space on the server ?
